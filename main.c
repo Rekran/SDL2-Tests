@@ -23,6 +23,11 @@ test.bodyBox.w = iH;
   test.clip[0].h = 32/2;
   test.clip[0].w = 32/2;
 
+  test.clip[1].x = 69;
+  test.clip[1].y = 607;
+  test.clip[1].h = 32/2;
+  test.clip[1].w = 32/2;
+
 player.bodyBox.x = 0;
 player.bodyBox.y = 0;
 player.bodyBox.h = iW*2;
@@ -43,15 +48,19 @@ player.bomberCount = 0;
 player.maxBomber = 1;
 player.speed = 3;
 
-bomber.bodyBox.h = iH*4;
-bomber.bodyBox.w = iW*4;
+bomber.bodyBox.h = iH;
+bomber.bodyBox.w = iW;
 
-
-bomber.clip[0].x = 0;
-bomber.clip[0].y = 0;
-bomber.clip[0].h = iH/2;
-bomber.clip[0].w = iW/2;
+for (int i = 0; i < 4; i++)
+{
+  bomber.clip[i].x = (1*i+1) + 16*i;
+  bomber.clip[i].y = 641;
+  bomber.clip[i].h = iH/2;
+  bomber.clip[i].w = iW/2;
+}
 int frame = 0;
+int frameBomber = 0;
+int Boom = 0;
 IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 if(SDL_Init(SDL_INIT_EVERYTHING) != 0)
     SDL_Log("Can't init %s", SDL_GetError());
@@ -164,13 +173,35 @@ if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
         frame--;
         
     }
-    
+
 
 }
 
-///Rendering vai vir aqui
+frameBomber++;
+
+if(frameBomber/4 >= 4){
+  frameBomber = 0;
+  Boom++;
+}
+if(Boom == 3){
+  player.bomberPlaced = 0;
+}
+
+///Rendering
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   SDL_RenderClear(renderer);
+ 
+  for (int j = 1; j < 12; j++)
+  {
+    test.bodyBox.y = 32*j;
+
+      for (int i = 2; i < 15 ; i++)
+      {
+        test.bodyBox.x = 32 * i;
+        SDL_RenderCopy(renderer,bomberTexture,&test.clip[1],&test.bodyBox);  
+      }
+  }
+
 
   test.bodyBox.y = 0;
 
@@ -237,6 +268,12 @@ for (int j = 2; j < 11; j+= 2)
       SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
     }
 }
+
+if(player.bomberPlaced)
+  SDL_RenderCopy(renderer,bomberTexture,&bomber.clip[frameBomber/4],&bomber.bodyBox); 
+
+
+
   SDL_SetRenderDrawColor(renderer,255, 255,255,255);
   SDL_RenderCopy(renderer,playerTexture,&player.clip[select][frame/3],&player.bodyBox);
   SDL_RenderPresent(renderer);
