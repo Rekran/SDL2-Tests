@@ -1,7 +1,7 @@
 #include "block.h"
 #include "texture.h"
-int height = 600;
-int width = 800;
+int height = 416;
+int width = 544;
 
 //Inicialização
 int main(int argc, char **argv)
@@ -11,11 +11,22 @@ int iW = 32, iH = 32;
 
 bomber bomber;
 bomberMan player;
+mapBlock test;
+
+test.bodyBox.x = 0;
+test.bodyBox.y = 0;
+test.bodyBox.h = iW;
+test.bodyBox.w = iH;
+
+  test.clip[0].x = 1;
+  test.clip[0].y = 607;
+  test.clip[0].h = 32/2;
+  test.clip[0].w = 32/2;
 
 player.bodyBox.x = 0;
 player.bodyBox.y = 0;
-player.bodyBox.h = iW*3;
-player.bodyBox.w = iH*3;
+player.bodyBox.h = iW*2;
+player.bodyBox.w = iH*2;
 
 for(int j = 0;j < 4;j++){
   for (int i = 0;i < 3;i++){
@@ -30,7 +41,7 @@ int select = 0;
 player.bomberPlaced = 0;
 player.bomberCount = 0;
 player.maxBomber = 1;
-player.speed = 5;
+player.speed = 3;
 
 bomber.bodyBox.h = iH*4;
 bomber.bodyBox.w = iW*4;
@@ -49,7 +60,7 @@ SDL_Window * window =  SDL_CreateWindow("Teste", 100, 100, width, height, 0);
 SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
 SDL_Texture *playerTexture = loadTexture("Bomberman4.png",renderer);
-SDL_Texture *bomberTexture = loadTexture("Bomber.png",renderer);
+SDL_Texture *bomberTexture = loadTexture("mapa.png",renderer);
 
 //Inicialização
 int running = 1;
@@ -161,9 +172,71 @@ if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
   SDL_RenderClear(renderer);
 
-  if(player.bomberPlaced)
-    SDL_RenderCopy(renderer,bomberTexture,&bomber.clip[0],&bomber.bodyBox);
+  test.bodyBox.y = 0;
 
+  for (int i = 0; i < 17 ; i++)
+  {
+    test.bodyBox.x = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+ 
+ test.bodyBox.y = 416-32;
+
+  for (int i = 0; i < 17 ; i++)
+  {
+    test.bodyBox.x = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+ 
+   test.bodyBox.y = 0;
+
+  for (int i = 0; i < 17 ; i++)
+  {
+    test.bodyBox.x = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+ 
+ test.bodyBox.x = 0;
+
+  for (int i = 1; i < 13 ; i++)
+  {
+    test.bodyBox.y = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+  
+ test.bodyBox.x = 32;
+
+  for (int i = 1; i < 13 ; i++)
+  {
+    test.bodyBox.y = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+test.bodyBox.x = 512;
+
+  for (int i = 1; i < 13 ; i++)
+  {
+    test.bodyBox.y = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+
+test.bodyBox.x = 512-32;
+
+  for (int i = 1; i < 13 ; i++)
+  {
+    test.bodyBox.y = 32 * i;
+    SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+  }
+
+for (int j = 2; j < 11; j+= 2)
+{
+  test.bodyBox.y = 32*j;
+
+    for (int i = 3; i < 14 ; i+=2)
+    {
+      test.bodyBox.x = 32 * i;
+      SDL_RenderCopy(renderer,bomberTexture,&test.clip[0],&test.bodyBox);  
+    }
+}
   SDL_SetRenderDrawColor(renderer,255, 255,255,255);
   SDL_RenderCopy(renderer,playerTexture,&player.clip[select][frame/3],&player.bodyBox);
   SDL_RenderPresent(renderer);
