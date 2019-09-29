@@ -22,3 +22,11 @@ typedef struct bomber
 
 }bomber;
 
+typedef struct mapBlock
+{    
+    SDL_Rect bodyBox;
+    SDL_Rect clip[2];
+
+}mapBlock;
+
+
